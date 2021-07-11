@@ -1,3 +1,9 @@
 #intro {
     height: 80vh;
   }
+.content{
+    padding: 5% 7%;
+}
+.fullpage{
+    height: 100vh;
+}
