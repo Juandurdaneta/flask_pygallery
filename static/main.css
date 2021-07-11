@@ -7,3 +7,7 @@
 .fullpage{
     height: 100vh;
 }
+
+.cover{
+    object-fit: cover;
+}
