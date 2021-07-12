@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm
+from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '59eb5820bce3227f5308d8e82fa62e97'
@@ -11,7 +11,8 @@ def home():
 
 @app.route("/login")
 def login():
-    return render_template('login.html', title="login")
+    form = LoginForm()
+    return render_template('login.html', title="login", form=form)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
