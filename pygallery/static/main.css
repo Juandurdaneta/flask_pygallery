@@ -10,7 +10,9 @@ body {
 .content{
     padding: 5% 7%;
 }
-
+.formulario-registro{
+  height: 100vh;
+}
 .formulario-registro .bg-image {
     background-image: url('https://images.unsplash.com/photo-1622398808270-71a3f6c425ea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1834&q=80');
     background-size: cover;
