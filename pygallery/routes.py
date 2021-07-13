@@ -1,3 +1,6 @@
+import secrets
+import os
+from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from pygallery.forms import RegistrationForm, LoginForm, UpdateUserForm
 from pygallery import app, db, bcrypt
@@ -83,11 +86,27 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+def subir_imagen(form_imagen):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_imagen.filename)
+    imagen_fn = random_hex + f_ext
+    ubicacion_imagen = os.path.join(app.root_path, 'static/imagenes_perfil', imagen_fn)
+
+    output_size = (300, 300)
+    i = Image.open(form_imagen)
+    i.thumbnail(output_size)
+    i.save(ubicacion_imagen)
+
+    return imagen_fn
+
 @app.route("/perfil", methods=['GET', 'POST'])
 @login_required
 def perfil():
     form = UpdateUserForm()
     if form.validate_on_submit():
+        if form.imagen.data:
+            archivo_imagen = subir_imagen(form.imagen.data)
+            current_user.imagen_perfil = archivo_imagen
         # ACTUALIZANDO DATOS DEL USUARIO
         current_user.username = form.username.data
         current_user.email = form.email.data
@@ -96,7 +115,7 @@ def perfil():
         print(current_user)
         flash("Tu usuario ha sido actualizado exitosamente!", "success")
         return redirect(url_for('perfil'))
-        
+
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
