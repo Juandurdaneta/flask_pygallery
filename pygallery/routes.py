@@ -1,11 +1,11 @@
 from flask import render_template, url_for, flash, redirect, request
-from pygallery.forms import RegistrationForm, LoginForm
+from pygallery.forms import RegistrationForm, LoginForm, UpdateUserForm
 from pygallery import app, db, bcrypt
 from pygallery.models import Usuario, Imagen, Etiqueta
 from flask_login import login_user, current_user, logout_user, login_required
 
 imagenes = [{
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1625860633266-8707a63d6671?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+    "ubicacion_imagen": "https://images.unsplash.com/photo-1626093632846-5c27587a0469?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1834&q=80",
     "propietario": "Juan"
 },
 {
@@ -13,7 +13,7 @@ imagenes = [{
     "propietario": "Alba"
 },
 {
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1626093632846-5c27587a0469?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1834&q=80",
+    "ubicacion_imagen": "https://images.unsplash.com/photo-1626180583122-c256e0ea54b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1834&q=80",
     "propietario": "Alba"
 },
 {
@@ -83,7 +83,23 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/perfil")
+@app.route("/perfil", methods=['GET', 'POST'])
 @login_required
 def perfil():
-    return render_template('perfil.html', title="Perfil")
+    form = UpdateUserForm()
+    if form.validate_on_submit():
+        # ACTUALIZANDO DATOS DEL USUARIO
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        
+        db.session.commit()
+        print(current_user)
+        flash("Tu usuario ha sido actualizado exitosamente!", "success")
+        return redirect(url_for('perfil'))
+        
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    
+    imagen = url_for('static', filename='/imagenes_perfil/'+current_user.imagen_perfil)
+    return render_template('perfil.html', title="Perfil", imagen=imagen, form=form)

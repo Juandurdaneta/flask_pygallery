@@ -3,6 +3,9 @@
 body {
     font-family: 'Inter', sans-serif;
 }
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
 
 #intro {
     height: 80vh;
@@ -25,4 +28,21 @@ body {
     background-size: cover;
     background-position: center;
     min-height: 100vh;
+}
+
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.account-img {
+  height: 200px;
+  width: 200px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+  object-fit: cover;
 }

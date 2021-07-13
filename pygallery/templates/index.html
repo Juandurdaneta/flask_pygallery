@@ -44,15 +44,19 @@
     </section>
 <!-- FIN INTRO -->
 {% endblock main %}
+<!-- Gallery -->
 
+<!-- Gallery -->
 {% block content %}
     <div class="row">
       {% for imagen in imagenes %}
-      <div class="col-lg-4 col-6 pt-2">
-        <figure class="figure">
-        <img src="{{imagen.ubicacion_imagen}}" class="figure-img img-fluid rounded shadow-3 mb-3 hover-shadow">
-        <figcaption class="figure-caption text-center">Publicado por:  {{imagen.propietario}}</figcaption>
-      </figure>
+        <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+          <img
+            src="{{imagen.ubicacion_imagen}}"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt=""
+          />
+      
       </div>
       {% endfor %}
     </div>
