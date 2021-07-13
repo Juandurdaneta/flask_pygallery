@@ -72,17 +72,27 @@ href="{{url_for('static', filename='main.css')}}"
               <i class="fas fa-search"></i>
             </span>
           </form>
-
-          <!-- INICIAR SESION -->
           <ul class="navbar-nav ms-3 w-25">
+
+          {% if current_user.is_authenticated %}
+              <li class="nav-item me-3">
+                 <a class="nav-link d-flex align-items-center" href="{{url_for('perfil')}}">Perfil</a>
+              </li>
+              <li class="nav-item me-3">
+                <a class="nav-link d-flex align-items-center" href="{{url_for('logout')}}">Cerrar Sesion</a>
+              </li>
+          {% else %}
+          <!-- INICIAR SESION -->
               <li class="nav-item me-3">
                  <a class="nav-link d-flex align-items-center" href="{{url_for('login')}}">Iniciar Sesion</a>
               </li>
+                <!-- REGISTRARSE -->
               <li class="nav-item">
                <a class="nav-link d-flex align-items-center bg-success text-white rounded" href="{{url_for('register')}}">Unete gratis</a>
               </li>
-          </ul>
-          
+          {% endif %}
+        </ul>
+
       </div>
 
 

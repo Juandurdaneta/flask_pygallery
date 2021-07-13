@@ -1,8 +1,8 @@
-from flask import render_template, url_for, flash, redirect
+from flask import render_template, url_for, flash, redirect, request
 from pygallery.forms import RegistrationForm, LoginForm
 from pygallery import app, db, bcrypt
 from pygallery.models import Usuario, Imagen, Etiqueta
-
+from flask_login import login_user, current_user, logout_user, login_required
 
 imagenes = [{
     "ubicacion_imagen": "https://images.unsplash.com/photo-1625860633266-8707a63d6671?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
@@ -38,13 +38,19 @@ def home():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+        
     form = LoginForm()
-
+    print(current_user)
     if form.validate_on_submit():
         # BUSCANDO USUARIO QUE COINCIDA CON EL CORREO ELECTRONICO INGRESADO
         usuario = Usuario.query.filter_by(email=form.email.data).first()
         if usuario and bcrypt.check_password_hash(usuario.password, form.password.data):
-            return redirect(url_for('home'))
+            login_user(usuario, remember = form.remember.data)
+            siguiente_pagina = request.args.get('next')
+
+            return redirect(siguiente_pagina) if siguiente_pagina else redirect(url_for('home'))
         else:
             flash("Inicio sesion infructuoso, por favor revisa tus credenciales y vuelva a intentarlo.", "danger")
 
@@ -52,6 +58,9 @@ def login():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))  
+
     form = RegistrationForm()
     if form.validate_on_submit():
         # GENERANDO HASH PARA LA CONTRASEÑA INGRESADA
@@ -68,3 +77,13 @@ def register():
         return redirect(url_for('home'))
 
     return render_template('register.html', title="register", form=form)
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+@app.route("/perfil")
+@login_required
+def perfil():
+    return render_template('perfil.html', title="Perfil")
