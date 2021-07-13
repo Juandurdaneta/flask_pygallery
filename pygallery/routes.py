@@ -1,6 +1,7 @@
 from flask import render_template, url_for, flash, redirect
 from pygallery.forms import RegistrationForm, LoginForm
-from pygallery import app, db
+from pygallery import app, db, bcrypt
+from pygallery.models import Usuario, Imagen, Etiqueta
 
 
 imagenes = [{
@@ -50,6 +51,16 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        # GENERANDO HASH PARA LA CONTRASEÑA INGRESADA
+        pass_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+
+        # CREANDO USUARIO CON LOS DATOS INGRESADOS EN EL FORM
+        user = Usuario(username=form.username.data, email=form.email.data, password=pass_hash)
+
+        # AGREGANDO EL USUARIO A LA BASE DE DATOS
+        db.session.add(user)
+        db.session.commit()
+
         flash(f"Cuenta creada para {form.username.data}!", "success")
         return redirect(url_for('home'))
 
