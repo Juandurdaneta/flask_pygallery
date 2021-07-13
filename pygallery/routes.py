@@ -39,12 +39,15 @@ def home():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+
     if form.validate_on_submit():
-        if form.email.data == "juan@demo.com" and form.password.data == "password":
-            flash("Bienvenido de nuevo!", "success")
+        # BUSCANDO USUARIO QUE COINCIDA CON EL CORREO ELECTRONICO INGRESADO
+        usuario = Usuario.query.filter_by(email=form.email.data).first()
+        if usuario and bcrypt.check_password_hash(usuario.password, form.password.data):
             return redirect(url_for('home'))
         else:
             flash("Inicio sesion infructuoso, por favor revisa tus credenciales y vuelva a intentarlo.", "danger")
+
     return render_template('login.html', title="login", form=form)
 
 @app.route("/register", methods=['GET', 'POST'])
