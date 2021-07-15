@@ -1,0 +1,60 @@
+{% extends "layout.html" %} {% block content %}
+{% if current_user == imagen.autor %}
+<div>
+    <a href="{{url_for('editar_imagen', id_imagen = imagen.id)}}" class="btn btn-primary btn-sm mt-1 mb-1">Editar</a>
+    <button
+    type="button"
+    class="btn btn-dark btn-sm m-1"
+    data-mdb-toggle="modal"
+    data-mdb-target="#modalEliminarImagen"
+  >
+    Eliminar
+  </button>
+</div>
+{% endif %}
+<img
+src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
+class="w-100 shadow-1-strong rounded mb-2 img-fluid"
+
+/>
+<caption>Subido por: {{imagen.autor.username}}</caption>
+<br>
+<caption>Etiquetas:</caption>
+
+{% for etiquetas in imagen.etiquetas %}
+<a href="" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
+{% endfor %}
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="modalEliminarImagen"
+  tabindex="-1"
+  aria-labelledby="modalEliminarImagenLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEliminarImagenLabel">Eliminar Imagen?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-mdb-dismiss="modal">
+          Cerrar
+        </button>
+        <form action="{{url_for('eliminar_imagen', id_imagen=imagen.id)}}" method="post">
+            <input type="submit" value="Eliminar" class="btn btn-dark">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

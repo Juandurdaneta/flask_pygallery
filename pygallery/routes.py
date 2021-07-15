@@ -1,7 +1,7 @@
 import secrets
 import os
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from pygallery.forms import RegistrationForm, LoginForm, UpdateUserForm, PublicarImagenForm
 from pygallery import app, db, bcrypt
 from pygallery.models import Usuario, Imagen, Etiqueta
@@ -111,7 +111,7 @@ def agregar_etiquetas(form_etiquetas):
             db.session.commit()
             etiquetas_agregadas.append(etiqueta_nueva)
         
-        if etiqueta_existente:
+        else:
             etiquetas_agregadas.append(etiqueta_existente)
 
     return etiquetas_agregadas
@@ -134,6 +134,14 @@ def subir_imagen(form_imagen, tags):
 
     return True
 
+def cambiar_imagen(form_imagen):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_imagen.filename)
+    imagen_fn = random_hex + f_ext
+    ubicacion_imagen = os.path.join(app.root_path, 'static/imagenes_subidas', imagen_fn)
+    form_imagen.save(ubicacion_imagen)
+
+    return imagen_fn
 
 @app.route("/publicar_imagen", methods=['GET', 'POST'])
 @login_required
@@ -146,4 +154,62 @@ def publicar_imagen():
             return redirect(url_for('home'))
         else:
             flash("Ha ocurrido un error al subir la imagen, intentalo de nuevo", "danger")
-    return render_template('publicar_imagen.html', title="Publicar Imagen", form=form)
+    
+    return render_template('publicar_imagen.html', title="Publicar Imagen", leyenda="Publicar Imagen", form=form)
+
+@app.route("/imagen/<int:id_imagen>")
+def imagen(id_imagen):
+    imagen = Imagen.query.get_or_404(id_imagen)
+    return render_template('imagen.html', title = "Imagen", imagen=imagen)
+
+
+@app.route("/imagen/<int:id_imagen>/editar", methods=['GET', 'POST'])
+@login_required
+def editar_imagen(id_imagen):
+    imagen = Imagen.query.get_or_404(id_imagen)
+    form = PublicarImagenForm()
+    if imagen.autor != current_user: # EN CASO DE QUE ALGUIEN DIFERENTE DEL AUTOR DE LA IMAGEN TRATE DE EDITARLA
+        abort(403)
+
+    if form.validate_on_submit():
+        if form.imagen.data:
+            os.remove(os.path.join(app.root_path, 'static/imagenes_subidas', imagen.ubicacion_imagen)) # ELIMINANDO LA IMAGEN ACTUAL PARA AGREGAR LA NUEVA
+            nueva_imagen = cambiar_imagen(form.imagen.data)
+            imagen.ubicacion_imagen = nueva_imagen
+        etiquetas = agregar_etiquetas(form.etiquetas.data)
+        
+        imagen.etiquetas = []
+
+        for etiqueta in etiquetas:
+            imagen.etiquetas.append(etiqueta)
+        
+        db.session.commit()
+
+        flash("Tu imagen ha sido publicada exitosamente!", "success")
+        return redirect(url_for('home'))
+
+    elif request.method == 'GET':
+        form.imagen.data = imagen.ubicacion_imagen
+        etiquetas = ""
+        for etiqueta in imagen.etiquetas:
+            if etiqueta == imagen.etiquetas[-1]:  # EN CASO DE QUE LA ETIQUETA SEA LA ULTIMA EN LA LISTA DE ETIQUETAS
+                etiquetas += etiqueta.nombre
+            else:
+                etiquetas += etiqueta.nombre + ","
+        form.etiquetas.data = etiquetas
+
+    return render_template('publicar_imagen.html', title = "Editar imagen", leyenda="Editar imagen", form=form)
+
+@app.route("/imagen/<int:id_imagen>/eliminar", methods=['POST'])
+@login_required
+def eliminar_imagen(id_imagen):
+    imagen = Imagen.query.get_or_404(id_imagen)
+    if imagen.autor != current_user: # EN CASO DE QUE ALGUIEN DIFERENTE DEL AUTOR DE LA IMAGEN TRATE DE ELIMINARLA
+        abort(403)
+    os.remove(os.path.join(app.root_path, 'static/imagenes_subidas', imagen.ubicacion_imagen)) # ELIMINANDO LA IMAGEN DEL SERVIDOR
+   
+    db.session.delete(imagen)
+    db.session.commit()
+   
+    flash("Tu imagen ha sido eliminada!", "success")
+    return redirect(url_for('home')) 

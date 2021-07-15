@@ -51,7 +51,7 @@ class UpdateUserForm(FlaskForm):
                 raise ValidationError('Ya existe una cuenta asosciada a ese correo electronico. Porfavor ingresa un correo electronico diferente.')
 
 class PublicarImagenForm(FlaskForm):
-        imagen = FileField('Imagen a publicar', validators=[FileAllowed(['jpg', 'png'])])
+        imagen = FileField('Imagen', validators=[FileAllowed(['jpg', 'png'])])
         etiquetas = StringField('Etiquetas de la Imagen', validators=[DataRequired()])
         submit = SubmitField('Publicar')
 

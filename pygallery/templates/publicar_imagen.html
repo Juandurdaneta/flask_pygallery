@@ -4,11 +4,11 @@
   <form action="" method="POST" class="mt-5" enctype="multipart/form-data">
     {{form.hidden_tag()}}
     <fieldset class="form-group">
-      <h2 class="mb-4">Publicar una imagen</h2>
+      <h2 class="mb-4">{{leyenda}}</h2>
       <!-- IMAGEN A SUBIR -->
 
       <div class="form-group mb-4">
-        {{form.imagen.label()}} {{form.imagen(class="form-control-file")}} {% if
+        {{form.imagen.label(class="form-label")}} {{form.imagen(class="form-control")}} {% if
         form.imagen.errors %} {% for error in form.imagen.errors %}
         <span class="text-danger">{{error}}</span><br />
         {% endfor %} {% endif %}
