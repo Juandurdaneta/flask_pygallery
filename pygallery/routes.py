@@ -2,41 +2,16 @@ import secrets
 import os
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
-from pygallery.forms import RegistrationForm, LoginForm, UpdateUserForm
+from pygallery.forms import RegistrationForm, LoginForm, UpdateUserForm, PublicarImagenForm
 from pygallery import app, db, bcrypt
 from pygallery.models import Usuario, Imagen, Etiqueta
 from flask_login import login_user, current_user, logout_user, login_required
 
-imagenes = [{
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1626093632846-5c27587a0469?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1834&q=80",
-    "propietario": "Juan"
-},
-{
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1625860191460-10a66c7384fb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80",
-    "propietario": "Alba"
-},
-{
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1626180583122-c256e0ea54b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1834&q=80",
-    "propietario": "Alba"
-},
-{
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1626092557341-0263049bb93c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1834&q=80",
-    "propietario": "Alba"
-},
-{
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1625857695225-ddd5f160c064?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80",
-    "propietario": "Alba"
-},
-{
-    "ubicacion_imagen": "https://images.unsplash.com/photo-1625869388548-11b830e57292?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1827&q=80",
-    "propietario": "Alba"
-}
-
-]
 
 @app.route("/")
 @app.route("/home")
 def home():
+    imagenes = Imagen.query.all()
     return render_template('index.html', imagenes=imagenes)
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -86,7 +61,7 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-def subir_imagen(form_imagen):
+def subir_imagen_perfil(form_imagen):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_imagen.filename)
     imagen_fn = random_hex + f_ext
@@ -105,7 +80,7 @@ def perfil():
     form = UpdateUserForm()
     if form.validate_on_submit():
         if form.imagen.data:
-            archivo_imagen = subir_imagen(form.imagen.data)
+            archivo_imagen = subir_imagen_perfil(form.imagen.data)
             current_user.imagen_perfil = archivo_imagen
         # ACTUALIZANDO DATOS DEL USUARIO
         current_user.username = form.username.data
@@ -122,3 +97,53 @@ def perfil():
     
     imagen = url_for('static', filename='/imagenes_perfil/'+current_user.imagen_perfil)
     return render_template('perfil.html', title="Perfil", imagen=imagen, form=form)
+
+def agregar_etiquetas(form_etiquetas):
+    etiquetas = form_etiquetas.split(",")
+    etiquetas_agregadas = []
+
+    for etiqueta in etiquetas:
+        etiqueta_existente = Etiqueta.query.filter_by(nombre=etiqueta).first() 
+
+        if not etiqueta_existente:
+            etiqueta_nueva = Etiqueta(nombre=etiqueta)
+            db.session.add(etiqueta_nueva)
+            db.session.commit()
+            etiquetas_agregadas.append(etiqueta_nueva)
+        
+        if etiqueta_existente:
+            etiquetas_agregadas.append(etiqueta_existente)
+
+    return etiquetas_agregadas
+
+def subir_imagen(form_imagen, tags):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_imagen.filename)
+    imagen_fn = random_hex + f_ext
+    ubicacion_imagen = os.path.join(app.root_path, 'static/imagenes_subidas', imagen_fn)
+
+    form_imagen.save(ubicacion_imagen)
+
+    nueva_imagen = Imagen(ubicacion_imagen = imagen_fn, id_usuario=current_user.id)
+
+    for etiqueta in tags:
+        nueva_imagen.etiquetas.append(etiqueta)
+    
+    db.session.add(nueva_imagen)
+    db.session.commit()
+
+    return True
+
+
+@app.route("/publicar_imagen", methods=['GET', 'POST'])
+@login_required
+def publicar_imagen():
+    form = PublicarImagenForm()
+    if form.validate_on_submit():
+        etiquetas = agregar_etiquetas(form.etiquetas.data)
+        if subir_imagen(form.imagen.data, etiquetas):
+            flash("Tu imagen ha sido publicada exitosamente!", "success")
+            return redirect(url_for('home'))
+        else:
+            flash("Ha ocurrido un error al subir la imagen, intentalo de nuevo", "danger")
+    return render_template('publicar_imagen.html', title="Publicar Imagen", form=form)

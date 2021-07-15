@@ -66,23 +66,32 @@ href="{{url_for('static', filename='main.css')}}"
         
   
         <!-- BUSQUEDA -->
-        <form class="d-flex align-items-center w-100 form-search">
+        <form class="d-flex align-items-center w-75 form-search me-3">
             <input type="search" class="form-control" placeholder="Buscar" aria-label="Search" />
             <span class="input-group-text border-0" id="search-addon">
               <i class="fas fa-search"></i>
             </span>
           </form>
-          <ul class="navbar-nav ms-3 w-25">
 
           {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                 <a class="nav-link d-flex align-items-center" href="{{url_for('perfil')}}">Perfil</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" href="{{url_for('logout')}}">Cerrar Sesion</a>
-              </li>
+        
+            
+                <a class="nav-link d-flex align-items-center bg-success text-white rounded me-1" href="{{url_for('publicar_imagen')}}"> <i class="fas fa-upload"></i>&nbsp; Publicar Imagen</a>
+
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown"
+                aria-expanded="false">
+                <img src="{{url_for('static', filename='imagenes_perfil/'+current_user.imagen_perfil)}}" class="rounded-circle img-fluid ml-3 img-center"
+                  height='50' width='50'>
+              </a>
+              <!-- Dropdown menu -->
+              <ul class="dropdown-menu dropdown-menu-end p-1" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{{url_for('perfil')}}">Perfil</a></li>
+                <li><a class="dropdown-item" href="{{url_for('logout')}}">Cerrar Sesion</a></li>
+          </ul>
+  
           {% else %}
           <!-- INICIAR SESION -->
+          <ul class="navbar-nav ms-3 w-25">
               <li class="nav-item me-3">
                  <a class="nav-link d-flex align-items-center" href="{{url_for('login')}}">Iniciar Sesion</a>
               </li>

@@ -1,0 +1,41 @@
+{% extends "layout.html" %} {% block content %}
+<div class="content-section">
+  <!-- FORMULARIO PARA SUBIR UNA IMAGEN -->
+  <form action="" method="POST" class="mt-5" enctype="multipart/form-data">
+    {{form.hidden_tag()}}
+    <fieldset class="form-group">
+      <h2 class="mb-4">Publicar una imagen</h2>
+      <!-- IMAGEN A SUBIR -->
+
+      <div class="form-group mb-4">
+        {{form.imagen.label()}} {{form.imagen(class="form-control-file")}} {% if
+        form.imagen.errors %} {% for error in form.imagen.errors %}
+        <span class="text-danger">{{error}}</span><br />
+        {% endfor %} {% endif %}
+      </div>
+
+      <!-- Etiquetas -->
+      <div class="form-group form-outline">
+        {% if form.etiquetas.errors %} {{ form.etiquetas(class="form-control
+        form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+          {% for error in form.etiquetas.errors %}
+          <span>{{error}}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{form.etiquetas(class="form-control form-control-lg",
+        id="etiquetas")}} {{form.etiquetas.label(class="form-control-label
+        form-label", for="etiquetas")}} {% endif %}
+        
+      </div>
+      <div id="textExample1" class="form-text mb-3">
+        Escribe etiquetas separadas por comas, Ejemplo: Perro,Divertido
+      </div>
+    </fieldset>
+    <!-- SUBMIT -->
+    <div class="form-group mt-2">
+      {{form.submit(class="btn btn-primary btn-block btn-rounded")}}
+    </div>
+  </form>
+</div>
+{% endblock content %}
