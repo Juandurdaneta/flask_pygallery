@@ -21,13 +21,11 @@
                                   <input type="search" id="form1" class="form-control form-control-lg" />
                                   <label class="form-label" for="form1">Busca imagenes</label>
                                   <div class="form-helper pt-2"><span class="font-weight-bold">Etiquetas recomendadas:</span> 
-                                    <a href="#!" class="text-black-50">spring,</a>  
-                                    <a href="#!" class="text-black-50">natural,</a>  
-                                    <a href="#!" class="text-black-50">outdoors,</a>  
-                                    <a href="#!" class="text-black-50">forest,</a>  
+                                    <a href="#!" class="text-black-50">perro,</a>  
+                                    <a href="#!" class="text-black-50">paisajes,</a>  
+                                    <a href="#!" class="text-black-50">flores,</a>  
                                     <a href="#!" class="text-black-50">cactus,</a>  
-                                    <a href="#!" class="text-black-50">flowers,</a>  
-                                    <a href="#!" class="text-black-50">more</a>
+                                    <a href="#!" class="text-black-50">edificios</a>
                                   </div>
                                 </div>
                                 <button type="button" class="btn btn-primary">
@@ -53,14 +51,15 @@
         <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
           <img
             src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
-            class="w-100 shadow-1-strong rounded mb-4"
-            alt=""
+            class="w-100 shadow-1-strong rounded mb-2"
+            
           />
-          <caption>Subido por: {{imagen.autor.username}}</caption><br>
+          <caption>Subido por: {{imagen.autor.username}}</caption>
+          <br>
           <caption>Etiquetas:</caption>
 
           {% for etiquetas in imagen.etiquetas %}
-          <a href="">{{etiquetas.nombre}}</a> |
+          <a href="" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
           {% endfor %}
       
       </div>
