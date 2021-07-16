@@ -47,8 +47,9 @@
 <!-- Gallery -->
 {% block content %}
     <div class="row">
-      {% for imagen in imagenes %}
-        <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+      <h2>Ultimas imagenes publicadas por nuestra comunidad:</h2>
+      {% for imagen in imagenes.items %}
+        <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 mt-5">
           <a href="{{url_for('imagen', id_imagen = imagen.id)}}">
           <img
             src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
@@ -56,16 +57,32 @@
             
           />
         </a>
-          <caption>Subido por: {{imagen.autor.username}}</caption>
-          <br>
+         <div class="d-flex justify-content-between mb-2">
+          <div> <caption> Publicado por: <a href="#">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
+        </div>
           <caption>Etiquetas:</caption>
 
           {% for etiquetas in imagen.etiquetas %}
-          <a href="" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
+          <a href="{{url_for('imagenes_etiqueta', etiqueta=etiquetas.nombre)}}" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
           {% endfor %}
       
       </div>
       {% endfor %}
+
     </div>
+
+    <div class="margin-top-8">
+    {% for num_pagina in imagenes.iter_pages(left_edge = 1, right_edge = 1, left_current = 1, right_current=2) %}
+    {% if num_pagina %}
+      {% if imagenes.pagina == num_pagina %}
+      <a href="{{url_for('home', pagina=num_pagina)}}" class="btn btn-success mb-4">{{num_pagina}}</a>
+      {% else %}
+      <a href="{{url_for('home', pagina=num_pagina)}}" class="btn btn-outline-success mb-4">{{num_pagina}}</a>
+      {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+  {% endfor %}
+</div>
 {% endblock content %}
 

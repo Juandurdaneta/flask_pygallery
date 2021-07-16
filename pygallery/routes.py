@@ -11,7 +11,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 @app.route("/home")
 def home():
-    imagenes = Imagen.query.all()
+    pagina = request.args.get('pagina', 1, type=int)
+    imagenes = Imagen.query.order_by(Imagen.fecha_publicacion.desc()).paginate(page=pagina, per_page=9)
     return render_template('index.html', imagenes=imagenes)
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -213,3 +214,10 @@ def eliminar_imagen(id_imagen):
    
     flash("Tu imagen ha sido eliminada!", "success")
     return redirect(url_for('home')) 
+
+@app.route("/etiqueta/<string:etiqueta>")
+def imagenes_etiqueta(etiqueta):
+    etiqueta_requerida = Etiqueta.query.filter_by(nombre=etiqueta).first_or_404()
+    imagenes = Imagen.query.filter(Imagen.etiquetas.contains(etiqueta_requerida)).order_by(Imagen.fecha_publicacion.desc())
+    #imagenes = etiqueta_requerida.imagenes.order_by(Imagen.fecha_publicacion.desc())
+    return render_template('imagen_etiqueta.html', imagenes=imagenes, title=etiqueta_requerida.nombre)

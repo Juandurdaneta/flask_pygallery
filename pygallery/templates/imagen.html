@@ -17,14 +17,14 @@ src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}
 class="w-100 shadow-1-strong rounded mb-2 img-fluid"
 
 />
-<caption>Subido por: {{imagen.autor.username}}</caption>
-<br>
-<caption>Etiquetas:</caption>
+<div class="d-flex justify-content-between mb-2">
+  <div> <caption> Publicado por: <a href="#">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
+</div>
+  <caption>Etiquetas:</caption>
 
-{% for etiquetas in imagen.etiquetas %}
-<a href="" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
-{% endfor %}
-
+  {% for etiquetas in imagen.etiquetas %}
+  <a href="" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
+  {% endfor %}
 <!-- Modal -->
 <div
   class="modal fade"

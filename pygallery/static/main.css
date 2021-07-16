@@ -54,3 +54,7 @@ h1, h2, h3, h4, h5, h6 {
 .bg-green{
   background-color: #3cb46e;
 }
+
+.margin-top-8{
+  margin-top: 8%
+}
