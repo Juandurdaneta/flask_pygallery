@@ -1,0 +1,38 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <div class="d-flex">
+      <img class="rounded-circle account-img img-fluid" src="{{url_for('static', filename='imagenes_perfil/'+usuario.imagen_perfil)}}" />
+      <div >
+        <h1 class="account-heading">{{usuario.username}}</h1>
+        {% if current_user == usuario %}
+        <a href="{{url_for('perfil')}}" class="btn btn-outline-primary mt-2">Editar perfil</a>
+        {% endif %}
+      </div>
+    </div>
+
+<div class="row">
+{% for imagen in imagenes %}
+<div class="col-lg-4 col-md-12 mb-4 mb-lg-0 mt-5">
+  <a href="{{url_for('imagen', id_imagen = imagen.id)}}">
+  <img
+    src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
+    class="w-100 shadow-1-strong rounded mb-2"
+    
+  />
+</a>
+ <div class="d-flex justify-content-between mb-2">
+  <div> <caption> Publicado por: <a href="{{url_for('perfil_usuario', usuario=imagen.autor.username)}}">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
+</div>
+  <caption>Etiquetas:</caption>
+
+  {% for etiquetas in imagen.etiquetas %}
+  <a href="{{url_for('imagenes_etiqueta', etiqueta=etiquetas.nombre)}}" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
+  {% endfor %}
+
+</div>
+{% endfor %}
+</div>
+</div>
+{% endblock content %}

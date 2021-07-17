@@ -85,7 +85,8 @@ href="{{url_for('static', filename='main.css')}}"
               </a>
               <!-- Dropdown menu -->
               <ul class="dropdown-menu dropdown-menu-end p-1" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{{url_for('perfil')}}">Perfil</a></li>
+                <li><a class="dropdown-item" href="{{url_for('perfil_usuario', usuario=current_user.username)}}">Publicaciones</a></li>
+                <li><a class="dropdown-item" href="{{url_for('perfil')}}">Ajustes de Cuenta</a></li>
                 <li><a class="dropdown-item" href="{{url_for('logout')}}">Cerrar Sesion</a></li>
           </ul>
   

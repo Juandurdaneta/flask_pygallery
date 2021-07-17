@@ -219,5 +219,10 @@ def eliminar_imagen(id_imagen):
 def imagenes_etiqueta(etiqueta):
     etiqueta_requerida = Etiqueta.query.filter_by(nombre=etiqueta).first_or_404()
     imagenes = Imagen.query.filter(Imagen.etiquetas.contains(etiqueta_requerida)).order_by(Imagen.fecha_publicacion.desc())
-    #imagenes = etiqueta_requerida.imagenes.order_by(Imagen.fecha_publicacion.desc())
     return render_template('imagen_etiqueta.html', imagenes=imagenes, title=etiqueta_requerida.nombre)
+
+@app.route("/usuario/<string:usuario>")
+def perfil_usuario(usuario):
+    usuario = Usuario.query.filter_by(username=usuario).first_or_404()
+    imagenes = Imagen.query.filter_by(autor=usuario).order_by(Imagen.fecha_publicacion.desc())
+    return render_template('imagenes_usuario.html', usuario=usuario, imagenes=imagenes)
