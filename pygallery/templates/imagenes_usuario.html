@@ -13,7 +13,7 @@
     </div>
 
 <div class="row">
-{% for imagen in imagenes %}
+{% for imagen in imagenes.items %}
 <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 mt-5">
   <a href="{{url_for('imagen', id_imagen = imagen.id)}}">
   <img
@@ -33,6 +33,24 @@
 
 </div>
 {% endfor %}
+
+
+<div class="margin-top-8">
+    
+    {% for num_pagina in imagenes.iter_pages(left_edge = 1, right_edge = 1, left_current = 1, right_current=2) %}
+    {% if num_pagina %}
+        {% if num_pagina > 1%}
+            {% if imagenes.pagina == num_pagina %}
+            <a href="{{url_for('home', pagina=num_pagina)}}" class="btn btn-success mb-4">{{num_pagina}}</a>
+            {% else %}
+            <a href="{{url_for('home', pagina=num_pagina)}}" class="btn btn-outline-success mb-4">{{num_pagina}}</a>
+            {% endif %}
+        {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+  {% endfor %}
+
 </div>
 </div>
 {% endblock content %}

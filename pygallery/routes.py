@@ -223,6 +223,9 @@ def imagenes_etiqueta(etiqueta):
 
 @app.route("/usuario/<string:usuario>")
 def perfil_usuario(usuario):
+    pagina = request.args.get('pagina', 1, type=int)
     usuario = Usuario.query.filter_by(username=usuario).first_or_404()
-    imagenes = Imagen.query.filter_by(autor=usuario).order_by(Imagen.fecha_publicacion.desc())
+    imagenes = Imagen.query.filter_by(autor=usuario).order_by(Imagen.fecha_publicacion.desc()).paginate(page=pagina, per_page=6)
+    #     pagina = request.args.get('pagina', 1, type=int)
+    # imagenes = Imagen.query.order_by(Imagen.fecha_publicacion.desc()).paginate(page=pagina, per_page=9)
     return render_template('imagenes_usuario.html', usuario=usuario, imagenes=imagenes)
