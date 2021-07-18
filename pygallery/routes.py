@@ -2,10 +2,11 @@ import secrets
 import os
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
-from pygallery.forms import RegistrationForm, LoginForm, UpdateUserForm, PublicarImagenForm
-from pygallery import app, db, bcrypt
+from pygallery.forms import RegistrationForm, LoginForm, UpdateUserForm, PublicarImagenForm, SolicitarReestablecerContraseñaForm, ReestablecerContraseñaForm
+from pygallery import app, db, bcrypt, mail
 from pygallery.models import Usuario, Imagen, Etiqueta
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 
 
 @app.route("/")
@@ -227,3 +228,43 @@ def perfil_usuario(usuario):
     usuario = Usuario.query.filter_by(username=usuario).first_or_404()
     imagenes = Imagen.query.filter_by(autor=usuario).order_by(Imagen.fecha_publicacion.desc()).paginate(page=pagina, per_page=6)
     return render_template('imagenes_usuario.html', usuario=usuario, imagenes=imagenes)
+
+
+def enviar_mail(usuario):
+    token = usuario.get_reset_token()
+    msg = Message('Solicitud de reestablecimiento de Contraseña', sender='noreply@pygallery.com', recipients=[usuario.email])
+    msg.body= f''' Para reestablecer tu contraseña visita el siguiente enlace:
+{url_for('reestablecer_contraseña', token = token, _external=True)}
+Si no hiciste esta solicitud simplemente ignora este mensaje y no se hara ningún cambio.
+'''
+    mail.send(msg)
+
+@app.route("/reestablecer", methods=['GET', 'POST'])
+def solicitud_reestablecimiento():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = SolicitarReestablecerContraseñaForm()
+    if form.validate_on_submit():
+        usuario = Usuario.query.filter_by(email=form.email.data).first()
+        enviar_mail(usuario)
+        flash("Se ha enviado un email a tu correo con instrucciones para reestablecer tu contraseña!", "info")
+        return redirect(url_for('home'))
+    return render_template('solicitud_reestablecimiento.html', title="Solicitar Reestablecimiento de Contraseña", form=form)
+
+@app.route("/reestablecer_contraseña/<token>", methods=['GET', 'POST'])
+def reestablecer_contraseña(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = ReestablecerContraseñaForm()
+    usuario = Usuario.verify_reset_token(token)
+    if not usuario:
+        flash('El enlace expiró o es invalido.', 'warning')
+        return redirect(url_for('solicitud_reestablecimiento'))
+    if form.validate_on_submit():
+        hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        usuario.password = hash
+        db.session.commit()
+        flash('Tu contraseña ha sido actualizada exitosamente!', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('reestablecer_contraseña.html', title="Reestablecer Contraseña", form=form)

@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
+
+
 {% block main %}
 <section class="formulario-registro">
     <div class="container-fluid">
         <div class="row">
+            <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image">
+            </div>
             <div class="col-md-8 col-lg-6">
                 <div class="register d-flex align-items-center py-5">
                     <div class="container">
@@ -24,71 +28,36 @@
                                     </a>
                                 </div>
                                     <br>
-                                <form action="" method="POST" class="mt-5">
-                                    {{form.hidden_tag()}}
-                                    <fieldset class="form-group">
-                                       
-                                    <h6 class="text-muted">Bienvenido de nuevo</h6>
-                                      <h2 class="mb-4">Inicia sesion con tus credenciales</h2>
-                                       <!-- EMAIL -->
-                                      <div class="form-group form-outline mb-4">
-                                       {% if
-                                        form.email.errors %} {{ form.email(class="form-control form-control-lg
-                                        is-invalid") }}
-                                        <div class="invalid-feedback">
-                                          {% for error in form.email.errors %}
-                                          <span>{{error}}</span>
-                                          {% endfor %}
-                                        </div>
-                                        {% else %} {{form.email(class="form-control form-control-lg", id="email")}}   {{form.email.label(class="form-control-label form-label", for="email")}} 
-                                        {%endif %}
-                                      </div>
-                                      <!-- PASSWORD -->
-                                      <div class="form-group form-outline mb-4">
-                                        {% if
-                                        form.password.errors %} {{ form.password(class="form-control
-                                        form-control-lg is-invalid") }}
-                                        <div class="invalid-feedback">
-                                          {% for error in form.password.errors %}
-                                          <span>{{error}}</span>
-                                          {% endfor %}
-                                        </div>
-                                        {% else %} {{form.password(class="form-control form-control-lg ")}} {{form.password.label(class="form-control-label form-label ")}}  {%
-                                        endif %}
-                                      </div>
-                                       <!-- REMEMBER -->
-                                      <div class="form-check">
-                                        {{form.remember(class="form-check-input")}}
-                                        {{form.remember.label(class="form-check-label")}}
-                                        
-                                      </div>
-                                
-                                    </fieldset>
-                                    <!-- SUBMIT -->
-                                    <div class="form-group mt-2">{{form.submit(class="btn btn-primary btn-block btn-rounded")}}
-                                    </div>
-                                  </form>
-
-                                  <div class="border-top pt-3">
-                                    <small> Problemas para iniciar sesion? <a href="{{url_for('solicitud_reestablecimiento')}}"> Restablecer contraseña</a></small>
-                                    <br>
-                                    <small class="text-muted">
-                                        Aun no tienes cuenta?
-                                        <a href="{{url_for('register')}}" class="ml-2">Registrate</a>
-                                    </small>
-                                  </div>
-
+                                    <form action="" method="POST" class="mt-5">
+                                        {{form.hidden_tag()}}
+                                        <fieldset class="form-group">
+                                              
+                                            <h2 class="mb-4">Reestablecer Contraseña</h2>
+                                             <!-- EMAIL -->
+                                             <div class="form-group form-outline mb-4">
+                                                {% if
+                                                 form.email.errors %} {{ form.email(class="form-control form-control-lg
+                                                 is-invalid") }}
+                                                 <div class="invalid-feedback">
+                                                   {% for error in form.email.errors %}
+                                                   <span>{{error}}</span>
+                                                   {% endfor %}
+                                                 </div>
+                                                 {% else %} {{form.email(class="form-control form-control-lg", id="email")}}   {{form.email.label(class="form-control-label form-label", for="email")}} 
+                                                 {%endif %}
+                                               </div>
+                                                  <!-- SUBMIT -->
+                                                  <div class="form-group mt-2">{{form.submit(class="btn btn-primary btn-block btn-rounded")}}</div>
+                                                </form>
+                                    
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image-login">
-            </div>
-
         </div>
     </div>    
 </section>  
+   
 
 {% endblock main %}

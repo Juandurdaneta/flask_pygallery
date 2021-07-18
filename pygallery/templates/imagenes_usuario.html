@@ -5,7 +5,7 @@
     <div class="d-flex">
       <img class="rounded-circle account-img img-fluid" src="{{url_for('static', filename='imagenes_perfil/'+usuario.imagen_perfil)}}" />
       <div >
-        <h1 class="account-heading">{{usuario.username}}</h1>
+        <h1 class="mt-5 account-heading">{{usuario.username}}</h1>
         {% if current_user == usuario %}
         <a href="{{url_for('perfil')}}" class="btn btn-outline-primary mt-2">Editar perfil</a>
         {% endif %}

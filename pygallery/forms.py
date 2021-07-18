@@ -55,3 +55,18 @@ class PublicarImagenForm(FlaskForm):
         etiquetas = StringField('Etiquetas de la Imagen', validators=[DataRequired()])
         submit = SubmitField('Publicar')
 
+class SolicitarReestablecerContraseñaForm(FlaskForm):
+    email = StringField('Correo Electronico', validators=[DataRequired(), Email()])
+    submit = SubmitField('Solicitar restablecimiento de la Contraseña')
+
+    
+    def validar_correo(self, email):
+        user = Usuario.query.filter_by(email = email.data).first()
+
+        if not user:
+            raise ValidationError('No existe una cuenta con ese correo electronico. Tienes que crear una cuenta.')
+
+class ReestablecerContraseñaForm(FlaskForm):
+     password = PasswordField('Contraseña', validators=[DataRequired()])
+     confirm_password = PasswordField('Confirmar Contraseña', validators=[DataRequired(), EqualTo('password')])
+     submit = SubmitField('Reestablecer Contraseña')

@@ -11,7 +11,7 @@
   />
 </a>
  <div class="d-flex justify-content-between mb-2">
-  <div> <caption> Publicado por: <a href="#">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
+  <div> <caption> Publicado por: <a href="{{url_for('perfil_usuario', usuario = imagen.autor.username)}}">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
 </div>
   <caption>Etiquetas:</caption>
 
