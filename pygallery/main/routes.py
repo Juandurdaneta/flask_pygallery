@@ -15,5 +15,5 @@ def home():
 @main.route("/buscar")
 def buscar():
     query = request.args.get('query')
-    print(query)
+    query = query.capitalize()
     return redirect(url_for('imagenes.imagenes_etiqueta', etiqueta = query))

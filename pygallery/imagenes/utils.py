@@ -13,6 +13,7 @@ def agregar_etiquetas(form_etiquetas):
         etiqueta_existente = Etiqueta.query.filter_by(nombre=etiqueta).first() 
 
         if not etiqueta_existente:
+            etiqueta = etiqueta.capitalize()
             etiqueta_nueva = Etiqueta(nombre=etiqueta)
             db.session.add(etiqueta_nueva)
             db.session.commit()
