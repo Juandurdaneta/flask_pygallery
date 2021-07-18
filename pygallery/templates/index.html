@@ -52,7 +52,7 @@
     <div class="row">
       <h2>Ultimas imagenes publicadas por nuestra comunidad:</h2>
       {% for imagen in imagenes.items %}
-        <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 mt-5">
+        <div class="col-lg-4 col-md-6 col-12 mb-lg-0 mt-5">
           <a href="{{url_for('imagenes.imagen', id_imagen = imagen.id)}}">
           <img
             src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
