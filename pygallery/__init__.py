@@ -23,6 +23,7 @@ def create_app(config_class=Config):
     from pygallery.usuarios.routes import usuarios
     from pygallery.imagenes.routes import imagenes
     from pygallery.main.routes import main
+    from pygallery.errors.handlers import errors
     
     db.init_app(app)
     bcrypt.init_app(app)
@@ -32,5 +33,11 @@ def create_app(config_class=Config):
     app.register_blueprint(usuarios)
     app.register_blueprint(imagenes)
     app.register_blueprint(main)
+    app.register_blueprint(errors)
+    
+
+    with app.app_context():
+        db.create_all()
+
 
     return app

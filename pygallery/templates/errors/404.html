@@ -1,0 +1,13 @@
+{% extends "layout.html"%}
+{% block content %}
+
+<div class="row text-center mt-0">
+    <div class="col-12">
+        <img src="{{url_for('static', filename='imagenes_error/404.png')}}" class="img-fluid" width="580">
+    </div>
+    <div class="col-12">
+        <h1 class="main-text">404</h1>
+        <p class="secondary-text">Esta no es la pagina que buscabas...</p>
+    </div>
+</div>
+{% endblock content %}

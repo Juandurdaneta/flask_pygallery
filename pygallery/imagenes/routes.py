@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, url_for, flash, redirect, request, current_app
+from flask import Blueprint, render_template, url_for, flash, redirect, request, current_app, abort
 from flask_login import current_user, login_required
 from pygallery import db
 from pygallery.models import Usuario, Etiqueta, Imagen

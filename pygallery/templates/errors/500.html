@@ -1,0 +1,13 @@
+{% extends "layout.html"%}
+{% block content %}
+
+<div class="row text-center mt-0">
+    <div class="col-12">
+        <img src="{{url_for('static', filename='imagenes_error/500.png')}}" class="img-fluid" width="580">
+    </div>
+    <div class="col-12">
+        <h1 class="main-text">500</h1>
+        <p class="secondary-text">Ha habido un error en el servidor al procesar tu solicitud... Intentalo de nuevo mas tarde.</p>
+    </div>
+</div>
+{% endblock content %}
