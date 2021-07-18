@@ -82,7 +82,10 @@ def eliminar_imagen(id_imagen):
 
 @imagenes.route("/etiqueta/<string:etiqueta>")
 def imagenes_etiqueta(etiqueta):
-    etiqueta_requerida = Etiqueta.query.filter_by(nombre=etiqueta).first_or_404()
-    imagenes = Imagen.query.filter(Imagen.etiquetas.contains(etiqueta_requerida)).order_by(Imagen.fecha_publicacion.desc())
-    return render_template('imagen_etiqueta.html', imagenes=imagenes, title=etiqueta_requerida.nombre)
+    etiqueta_requerida = Etiqueta.query.filter_by(nombre=etiqueta).first()
+    if etiqueta_requerida:
+        imagenes = Imagen.query.filter(Imagen.etiquetas.contains(etiqueta_requerida)).order_by(Imagen.fecha_publicacion.desc())
+        return render_template('imagen_etiqueta.html', imagenes=imagenes, title=etiqueta)
+    else:
+        return render_template('imagen_etiqueta.html', title=etiqueta)
 

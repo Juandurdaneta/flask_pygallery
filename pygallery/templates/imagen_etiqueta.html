@@ -1,6 +1,7 @@
 {% extends "layout.html" %} {% block content %}
 <div class="row">
-    <h1>{{title}}</h1>
+{% if imagenes %}
+<h1>{{title}}</h1>
 {% for imagen in imagenes %}
 <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 mt-5">
   <a href="{{url_for('imagenes.imagen', id_imagen = imagen.id)}}">
@@ -21,5 +22,8 @@
 
 </div>
 {% endfor %}
+{% else %}
+<h1>No se han encontrados resultados para "{{title}}"</h1>
+{% endif %}
 </div>
 {% endblock content %}

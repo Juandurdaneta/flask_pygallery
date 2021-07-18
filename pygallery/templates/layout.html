@@ -66,8 +66,8 @@ href="{{url_for('static', filename='main.css')}}"
         
   
         <!-- BUSQUEDA -->
-        <form class="d-flex align-items-center w-75 form-search me-3" method="GET">
-            <input type="search" class="form-control" placeholder="Buscar" aria-label="Search" />
+        <form class="d-flex align-items-center w-75 form-search me-3" method="GET" action="{{url_for('main.buscar')}}">
+            <input type="search" class="form-control" placeholder="Buscar" aria-label="Search" name="query" />
             <span class="input-group-text border-0" id="search-addon">
               <i class="fas fa-search"></i>
             </span>
