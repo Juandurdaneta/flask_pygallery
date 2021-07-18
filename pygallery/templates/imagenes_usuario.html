@@ -7,7 +7,7 @@
       <div >
         <h1 class="mt-5 account-heading">{{usuario.username}}</h1>
         {% if current_user == usuario %}
-        <a href="{{url_for('perfil')}}" class="btn btn-outline-primary mt-2">Editar perfil</a>
+        <a href="{{url_for('usuarios.perfil')}}" class="btn btn-outline-primary mt-2">Editar perfil</a>
         {% endif %}
       </div>
     </div>
@@ -15,7 +15,7 @@
 <div class="row">
 {% for imagen in imagenes.items %}
 <div class="col-lg-4 col-md-12 mb-4 mb-lg-0 mt-5">
-  <a href="{{url_for('imagen', id_imagen = imagen.id)}}">
+  <a href="{{url_for('imagenes.imagen', id_imagen = imagen.id)}}">
   <img
     src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
     class="w-100 shadow-1-strong rounded mb-2"
@@ -23,12 +23,12 @@
   />
 </a>
  <div class="d-flex justify-content-between mb-2">
-  <div> <caption> Publicado por: <a href="{{url_for('perfil_usuario', usuario=imagen.autor.username)}}">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
+  <div> <caption> Publicado por: <a href="{{url_for('usuarios.perfil_usuario', usuario=imagen.autor.username)}}">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
 </div>
   <caption>Etiquetas:</caption>
 
   {% for etiquetas in imagen.etiquetas %}
-  <a href="{{url_for('imagenes_etiqueta', etiqueta=etiquetas.nombre)}}" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
+  <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta=etiquetas.nombre)}}" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
   {% endfor %}
 
 </div>
@@ -41,9 +41,9 @@
     {% if num_pagina %}
         {% if num_pagina > 1%}
             {% if imagenes.pagina == num_pagina %}
-            <a href="{{url_for('home', pagina=num_pagina)}}" class="btn btn-success mb-4">{{num_pagina}}</a>
+            <a href="{{url_for('main.home', pagina=num_pagina)}}" class="btn btn-success mb-4">{{num_pagina}}</a>
             {% else %}
-            <a href="{{url_for('home', pagina=num_pagina)}}" class="btn btn-outline-success mb-4">{{num_pagina}}</a>
+            <a href="{{url_for('main.home', pagina=num_pagina)}}" class="btn btn-outline-success mb-4">{{num_pagina}}</a>
             {% endif %}
         {% endif %}
     {% else %}

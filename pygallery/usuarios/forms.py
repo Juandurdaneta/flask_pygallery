@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from flask_wtf.file import FileField, FileAllowed
-from pygallery.models import Usuario
 from flask_login import current_user
+from pygallery.models import Usuario
 
 class RegistrationForm(FlaskForm):
     username = StringField('Nombre de Usuario', validators=[DataRequired(), Length(min=2, max=20)])
@@ -49,11 +49,6 @@ class UpdateUserForm(FlaskForm):
 
             if user:
                 raise ValidationError('Ya existe una cuenta asosciada a ese correo electronico. Porfavor ingresa un correo electronico diferente.')
-
-class PublicarImagenForm(FlaskForm):
-        imagen = FileField('Imagen', validators=[FileAllowed(['jpg', 'png'])])
-        etiquetas = StringField('Etiquetas de la Imagen', validators=[DataRequired()])
-        submit = SubmitField('Publicar')
 
 class SolicitarReestablecerContraseñaForm(FlaskForm):
     email = StringField('Correo Electronico', validators=[DataRequired(), Email()])
