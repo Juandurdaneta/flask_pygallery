@@ -57,5 +57,48 @@
         <div class="form-group mt-5 mb-5">{{form.submit(class="btn btn-primary btn-block btn-rounded")}}</div>
         
       </form>
+
+      <button  type="button"
+      class="btn btn-dark btn-block btn-rounded"
+      data-mdb-toggle="modal"
+      data-mdb-target="#modalEliminarCuenta">
+      Eliminar Cuenta
+    </button>
 </div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="modalEliminarCuenta"
+  tabindex="-1"
+  aria-labelledby="modalEliminarCuentaLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEliminarCuentaLabel">Seguro que deseas eliminar tu cuenta?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Esta es una acción permanente, al eliminar tu cuenta se eliminarán todos las imagenes y repositorios que hayas creado.</p>
+        <div class=" d-flex justify-content-end">
+          <button type="button" class="btn btn-light" data-mdb-dismiss="modal">
+            Cerrar
+          </button>
+          <form action="{{url_for('usuarios.eliminar_usuario', id_usuario = current_user.id)}}" method="post">
+            <input type="submit" value="Eliminar" class="btn btn-dark">
+          </form>
+        </div>  
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% endblock content %}

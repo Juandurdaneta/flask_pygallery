@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, redirect, request, url_for, flash
+import os
+from flask import Blueprint, render_template, redirect, request, url_for, flash, current_app
 from flask_login import login_user, current_user, logout_user, login_required
 from pygallery import db, bcrypt
 from pygallery.models import Usuario, Etiqueta, Imagen
@@ -116,3 +117,26 @@ def reestablecer_contraseña(token):
         return redirect(url_for('usuarios.login'))
 
     return render_template('reestablecer_contraseña.html', title="Reestablecer Contraseña", form=form)
+
+@usuarios.route("/eliminar_usuario/<int:id_usuario>", methods=['POST'])
+@login_required
+def eliminar_usuario(id_usuario):
+    usuario = Usuario.query.get_or_404(id_usuario)
+    if usuario != current_user:
+        abort(403)
+
+    for imagen in usuario.imagenes:
+        os.remove(os.path.join(current_app.root_path, 'static/imagenes_subidas', imagen.ubicacion_imagen)) # ELIMINANDO IMAGENES CREADAS POR EL USUARIO
+        db.session.delete(imagen)
+
+    os.remove(os.path.join(current_app.root_path, 'static/imagenes_perfil', usuario.imagen_perfil)) # ELIMINANDO LA IMAGEN DEL SERVIDOR
+
+
+    db.session.delete(usuario)
+    db.session.commit()
+
+    logout_user()
+
+
+    flash('Usuario Eliminado exitosamente, lamentamos verte ir.', 'success')
+    return redirect(url_for('main.home'))
