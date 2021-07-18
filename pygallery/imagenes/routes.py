@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, url_for, flash, redirect, request,
 from flask_login import current_user, login_required
 from pygallery import db
 from pygallery.models import Usuario, Etiqueta, Imagen
-from pygallery.imagenes.forms import PublicarImagenForm
+from pygallery.imagenes.forms import PublicarImagenForm, EditarImagenForm
 from pygallery.imagenes.utils import agregar_etiquetas, subir_imagen, cambiar_imagen
 
 
@@ -20,8 +20,8 @@ def publicar_imagen():
             return redirect(url_for('main.home'))
         else:
             flash("Ha ocurrido un error al subir la imagen, intentalo de nuevo", "danger")
-    
-    return render_template('publicar_imagen.html', title="Publicar Imagen", leyenda="Publicar Imagen", form=form)
+    etiquetas = Etiqueta.query.limit(5).all()
+    return render_template('publicar_imagen.html', title="Publicar Imagen", leyenda="Publicar Imagen", form=form, etiquetas=etiquetas)
 
 @imagenes.route("/imagen/<int:id_imagen>")
 def imagen(id_imagen):
@@ -33,7 +33,7 @@ def imagen(id_imagen):
 @login_required
 def editar_imagen(id_imagen):
     imagen = Imagen.query.get_or_404(id_imagen)
-    form = PublicarImagenForm()
+    form = EditarImagenForm()
     if imagen.autor != current_user: # EN CASO DE QUE ALGUIEN DIFERENTE DEL AUTOR DE LA IMAGEN TRATE DE EDITARLA
         abort(403)
 
@@ -64,7 +64,8 @@ def editar_imagen(id_imagen):
                 etiquetas += etiqueta.nombre + ","
         form.etiquetas.data = etiquetas
 
-    return render_template('publicar_imagen.html', title = "Editar imagen", leyenda="Editar imagen", form=form)
+    etiquetas = Etiqueta.query.limit(5).all()
+    return render_template('publicar_imagen.html', title = "Editar imagen", leyenda="Editar imagen", form=form, etiquetas=etiquetas)
 
 @imagenes.route("/imagen/<int:id_imagen>/eliminar", methods=['POST'])
 @login_required

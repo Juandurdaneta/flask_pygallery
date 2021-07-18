@@ -12,13 +12,13 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirmar Contraseña', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Crear Cuenta')
 
-    def validar_nombreusuario(self, username):
+    def validate_username(self, username):
         user = Usuario.query.filter_by(username = username.data).first()
 
         if user:
             raise ValidationError('Ya existe un usuario con ese nombre. Porfavor ingresa un nombre de usuario diferente')
 
-    def validar_correo(self, email):
+    def validate_email(self, email):
         user = Usuario.query.filter_by(email = email.data).first()
 
         if user:
@@ -36,14 +36,14 @@ class UpdateUserForm(FlaskForm):
     imagen = FileField('Actualizar Imagen De Perfil', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Actualizar Cuenta')
 
-    def validar_nombreusuario(self, username):
+    def validate_username(self, username):
         if username.data != current_user.username:
             user = Usuario.query.filter_by(username = username.data).first()
 
             if user:
                 raise ValidationError('Ya existe un usuario con ese nombre. Porfavor ingresa un nombre de usuario diferente')
 
-    def validar_correo(self, email):
+    def validate_email(self, email):
         if email.data != current_user.email:
             user = Usuario.query.filter_by(email = email.data).first()
 
@@ -55,7 +55,7 @@ class SolicitarReestablecerContraseñaForm(FlaskForm):
     submit = SubmitField('Solicitar restablecimiento de la Contraseña')
 
     
-    def validar_correo(self, email):
+    def validate_email(self, email):
         user = Usuario.query.filter_by(email = email.data).first()
 
         if not user:

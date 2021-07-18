@@ -6,9 +6,25 @@
       <img class="rounded-circle account-img img-fluid" src="{{url_for('static', filename='imagenes_perfil/'+usuario.imagen_perfil)}}" />
       <div >
         <h1 class="mt-5 account-heading">{{usuario.username}}</h1>
+        <div class="d-flex justify-content-center">
+        <div class="dropdown mt-2">
+          <button
+            class="btn btn-outline-primary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-mdb-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Todas las imagenes
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#">Repositorios de imagenes</a></li>
+          </ul>
+        </div>
         {% if current_user == usuario %}
-        <a href="{{url_for('usuarios.perfil')}}" class="btn btn-outline-primary mt-2">Editar perfil</a>
+        <a href="{{url_for('usuarios.perfil')}}" class="btn btn-outline-primary mt-2 ms-3">Editar perfil</a>
         {% endif %}
+      </div>
       </div>
     </div>
 
@@ -39,13 +55,11 @@
     
     {% for num_pagina in imagenes.iter_pages(left_edge = 1, right_edge = 1, left_current = 1, right_current=2) %}
     {% if num_pagina %}
-        {% if num_pagina > 1%}
-            {% if imagenes.pagina == num_pagina %}
-            <a href="{{url_for('main.home', pagina=num_pagina)}}" class="btn btn-success mb-4">{{num_pagina}}</a>
+            {% if imagenes.page == num_pagina %}
+            <a href="{{url_for('usuarios.perfil_usuario', usuario = usuario.username, pagina=num_pagina )}}" class="btn btn-success mb-4">{{num_pagina}}</a>
             {% else %}
-            <a href="{{url_for('main.home', pagina=num_pagina)}}" class="btn btn-outline-success mb-4">{{num_pagina}}</a>
+            <a href="{{url_for('usuarios.perfil_usuario', usuario = usuario.username, pagina=num_pagina)}}" class="btn btn-outline-success mb-4">{{num_pagina}}</a>
             {% endif %}
-        {% endif %}
     {% else %}
     ...
     {% endif %}

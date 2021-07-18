@@ -19,7 +19,7 @@
                               <div class="input-group">
                                 <div class="form-outline flex-fill">
                                   <form action="{{url_for('main.buscar')}}" class="form-outline flex-fill" method="get">
-                                  <input type="search" id="form1" class="form-control form-control-lg" name="query" />
+                                  <input type="search" id="form1" class="form-control form-control-lg" name="query" required />
                                   <label class="form-label" for="form1">Busca imagenes</label>
                                   <div class="form-helper pt-2"><span class="font-weight-bold">Etiquetas recomendadas:</span> 
                                     <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta='Perro')}}" class="text-black-50">Perro,</a>  
@@ -77,7 +77,7 @@
     <div class="margin-top-8">
     {% for num_pagina in imagenes.iter_pages(left_edge = 1, right_edge = 1, left_current = 1, right_current=2) %}
     {% if num_pagina %}
-      {% if imagenes.pagina == num_pagina %}
+      {% if imagenes.page == num_pagina %}
       <a href="{{url_for('main.home', pagina=num_pagina)}}" class="btn btn-success mb-4">{{num_pagina}}</a>
       {% else %}
       <a href="{{url_for('main.home', pagina=num_pagina)}}" class="btn btn-outline-success mb-4">{{num_pagina}}</a>

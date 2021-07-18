@@ -36,6 +36,37 @@
     <div class="form-group mt-2">
       {{form.submit(class="btn btn-primary btn-block btn-rounded")}}
     </div>
+    <div class="mt-3">
+      <p>Etiquetas populares:</p>
+      <p>
+      {% for etiqueta in etiquetas %}
+      <span class="bg-primary rounded text-white p-1 etiquetasPopulares" style="cursor:pointer">{{etiqueta.nombre}}</span>
+      {% endfor %}
+    </p>
+    </div>
+
   </form>
 </div>
+
+<script>
+  etiquetas = document.getElementById("etiquetas")
+  etiquetasPopulares = document.getElementsByClassName("etiquetasPopulares")
+  Object.values(etiquetasPopulares).forEach(etiqueta => {
+    etiqueta.addEventListener('click', function(){
+      if(etiquetas.value == ""){
+        etiquetas.value += etiqueta.innerHTML 
+      } else{
+        etiquetas.value += ","+ etiqueta.innerHTML
+      }
+
+      etiqueta.hidden = true
+
+     
+    })
+  })
+
+ 
+
+
+</script>
 {% endblock content %}
