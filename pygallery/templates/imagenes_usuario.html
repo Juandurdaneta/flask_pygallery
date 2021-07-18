@@ -6,25 +6,12 @@
       <img class="rounded-circle account-img img-fluid" src="{{url_for('static', filename='imagenes_perfil/'+usuario.imagen_perfil)}}" />
       <div >
         <h1 class="mt-5 account-heading">{{usuario.username}}</h1>
-        <div class="d-flex justify-content-center">
-        <!-- <div class="dropdown mt-2">
-          <button
-            class="btn btn-outline-primary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-mdb-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Todas las imagenes
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#">Repositorios de imagenes</a></li>
-          </ul>
-        </div> -->
+  
+  
         {% if current_user == usuario %}
         <a href="{{url_for('usuarios.perfil')}}" class="btn btn-outline-primary mt-2 ms-3">Editar perfil</a>
         {% endif %}
-      </div>
+
       </div>
     </div>
 
