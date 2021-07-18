@@ -18,19 +18,22 @@
                             <div class="col-12 mb-4">
                               <div class="input-group">
                                 <div class="form-outline flex-fill">
-                                  <input type="search" id="form1" class="form-control form-control-lg" />
+                                  <form action="{{url_for('main.buscar')}}" class="form-outline flex-fill" method="get">
+                                  <input type="search" id="form1" class="form-control form-control-lg" name="query" />
                                   <label class="form-label" for="form1">Busca imagenes</label>
                                   <div class="form-helper pt-2"><span class="font-weight-bold">Etiquetas recomendadas:</span> 
-                                    <a href="#!" class="text-black-50">perro,</a>  
-                                    <a href="#!" class="text-black-50">paisajes,</a>  
-                                    <a href="#!" class="text-black-50">flores,</a>  
-                                    <a href="#!" class="text-black-50">cactus,</a>  
-                                    <a href="#!" class="text-black-50">edificios</a>
+                                    <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta='Perro')}}" class="text-black-50">Perro,</a>  
+                                    <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta='Paisajes')}}" class="text-black-50">Paisajes,</a>  
+                                    <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta='Flores')}}" class="text-black-50">Flores,</a>  
+                                    <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta='Cactus')}}" class="text-black-50">Cactus,</a>  
+                                    <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta='Edificios')}}" class="text-black-50">Edificios</a>
                                   </div>
                                 </div>
-                                <button type="button" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary">
                                   <i class="fas fa-search"></i>
                                 </button>
+                              </form>
+                              </div>
                               </div>
                             </div>
                           </div>
