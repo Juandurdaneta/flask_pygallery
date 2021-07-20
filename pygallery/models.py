@@ -17,6 +17,7 @@ class Usuario(db.Model, UserMixin):
     imagen_perfil = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     imagenes = db.relationship('Imagen', backref="autor", lazy=True)
+    repositorios = db.relationship('Repositorio', backref="propietario", lazy=True)
 
     def __repr__(self):
         return f"Usuario('{self.username}','{self.email}','{self.imagen_perfil}')"
@@ -57,3 +58,17 @@ class Etiqueta(db.Model):
 
     def __repr__(self):
         return f"Etiqueta('{self.nombre}')"
+
+
+repositorios = db.Table('repositorios',
+                db.Column('repositorio_id', db.Integer, db.ForeignKey('repositorio.id'), primary_key=True),
+                db.Column('imagen_id', db.Integer, db.ForeignKey('imagen.id'), primary_key=True)
+                )
+
+class Repositorio(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre_repositorio = db.Column(db.String(20), nullable=False)
+    id_propietario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    
+    def __repr__(self):
+        return f"Repositorio('{self.nombre_repositorio}')"

@@ -1,0 +1,56 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <div class="d-flex">
+      <img class="rounded-circle account-img img-fluid" src="{{url_for('static', filename='imagenes_perfil/'+usuario.imagen_perfil)}}" />
+      <div >
+        <h1 class="mt-5 account-heading">{{usuario.username}}</h1>
+  
+        <div class="d-flex justify-content-start">
+            <div class="dropdown mt-2 ms-0">
+              <button
+                class="btn btn-outline-primary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Repositorios de {{usuario.username}}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="{{url_for('usuarios.perfil_usuario', usuario=usuario.username)}}">Todas las imagenes</a></li>
+              </ul>
+            </div>
+  
+  
+        {% if current_user == usuario %}
+        <a href="{{url_for('usuarios.perfil')}}" class="btn btn-outline-primary mt-2 ms-3">Editar perfil</a>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+<hr>
+<div class="row">
+    <div class="col">
+        {% if repositorios %}
+            <p>Se han encontrado repositorios </p>
+            {{repositorios.nombre_repositorio}}
+        {% else %}
+            {% if current_user == usuario %}
+            <div class="p-5 text-center">
+                 <h5>Aun no tienes repositorios</h5>
+                <a href="#" class="btn btn-primary mt-1"> <i class="fa fa-plus" aria-hidden="true"></i> Crear Repositorio</a>
+            {% else %}
+            <div class="text-center p-5">
+            <h4>Este usuario aun no tiene repositorios de imagenes</h4>
+            <img src="{{url_for('static', filename='imagenes_error/404.png')}}" class="img-fluid" width="580">
+        </div>
+        </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+</div>
+{% endblock content %}
