@@ -8,7 +8,7 @@ Desarrollado por Juan Urdaneta, C.I. 27.683.174
 
 Desarrollo web II - Universidad Rafael Urdaneta - Periodo 2021B
 
-##Funcionalidades de la web
+## Funcionalidades de la web
 
 - [x] Creación de Usuario.
 - [x] Autenticación del Usuario.
