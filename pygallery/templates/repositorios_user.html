@@ -91,7 +91,7 @@
      
       {% for repositorio in repositorios %}
         <li class="p-2">
-          <a href="{{url_for('repositorios.repositorio', usuario = repositorio.propietario.username, repositorio = repositorio.nombre_repositorio)}}">
+          <a href="{{url_for('repositorios.repositorio', usuario = repositorio.propietario.username, repositorio = repositorio.id)}}">
          <h5 class="text-primary"> {{repositorio.nombre_repositorio}}</h5>
          </a>
          {% if repositorio.descripcion %}

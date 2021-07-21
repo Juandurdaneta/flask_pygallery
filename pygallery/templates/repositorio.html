@@ -27,10 +27,7 @@
     class="w-100 shadow-1-strong rounded mb-2"
   />
   {% if current_user == repositorio.propietario %}
-  <a class="btn btn-light btn-sm btn-floating absolute"> x</a>
-    <!-- <form action="{{url_for('imagenes.eliminar_imagen', id_imagen=imagen.id)}}" method="post">
-            <input type="submit" value="Eliminar" class="btn btn-dark ">
-        </form> -->
+  <a class="btn btn-light btn-sm btn-floating absolute" href="{{url_for('repositorios.quitar_imagen', id_imagen=imagen.id, id_repositorio=repositorio.id)}}"> x</a>
   {% endif %}
 </a>
  <div class="d-flex justify-content-between mb-2">

@@ -23,10 +23,10 @@ def repositorios_usuario(usuario):
         flash("Error al crear el repositorio, Intenalo de nuevo", "danger")
     return render_template('repositorios_user.html', title="Repositorios", usuario=usuario, repositorios = repositorios_user, form=form)
 
-@repositorios.route('/usuario/<string:usuario>/<string:repositorio>')
+@repositorios.route('/usuario/<string:usuario>/<int:repositorio>')
 def repositorio(usuario, repositorio):
     usuario = Usuario.query.filter_by(username=usuario).first_or_404()
-    repositorio_usuario = Repositorio.query.filter(Repositorio.id_propietario == usuario.id, Repositorio.nombre_repositorio == repositorio).first_or_404()
+    repositorio_usuario = Repositorio.query.filter(Repositorio.id_propietario == usuario.id, Repositorio.id == repositorio).first_or_404()
 
     return render_template("repositorio.html", title=repositorio_usuario.nombre_repositorio, repositorio=repositorio_usuario)
 
@@ -34,8 +34,6 @@ def repositorio(usuario, repositorio):
 def agregar_imagen_repositorio(id_repositorio, id_imagen):
     repositorio = Repositorio.query.get_or_404(id_repositorio)
     imagen = Imagen.query.get_or_404(id_imagen)
-
-    
 
     if repositorio.propietario != current_user:
         abort(403)
@@ -50,3 +48,19 @@ def agregar_imagen_repositorio(id_repositorio, id_imagen):
         
     return redirect(url_for("imagenes.imagen", id_imagen = id_imagen))
 
+
+@repositorios.route('/repositorio/<int:id_repositorio>/quitar/<int:id_imagen>')
+def quitar_imagen(id_imagen, id_repositorio):
+    repositorio = Repositorio.query.get_or_404(id_repositorio)
+    imagen = Imagen.query.get_or_404(id_imagen)
+
+    if repositorio.propietario != current_user:
+        abort(403)
+
+    if imagen in repositorio.imagenes:
+        repositorio.imagenes.remove(imagen)
+        db.session.commit()
+        flash("Imagen eliminada del repositorio", "success")
+        return redirect(url_for('repositorios.repositorio', usuario=repositorio.propietario.username, repositorio=repositorio.id))
+    else:
+        abort(404)
