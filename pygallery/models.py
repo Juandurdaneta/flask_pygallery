@@ -47,6 +47,7 @@ class Imagen(db.Model):
     fecha_publicacion = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     etiquetas = db.relationship('Etiqueta', secondary=etiquetas, lazy='subquery', backref=db.backref('imagenes', lazy=True))
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    
 
     def __repr__(self):
         return f"Imagen('{self.ubicacion_imagen}','{self.fecha_publicacion}')"
@@ -60,7 +61,7 @@ class Etiqueta(db.Model):
         return f"Etiqueta('{self.nombre}')"
 
 
-repositorios = db.Table('repositorios',
+imagenes_repositorio = db.Table('imagenes_repositorio',
                 db.Column('repositorio_id', db.Integer, db.ForeignKey('repositorio.id'), primary_key=True),
                 db.Column('imagen_id', db.Integer, db.ForeignKey('imagen.id'), primary_key=True)
                 )
@@ -70,6 +71,7 @@ class Repositorio(db.Model):
     nombre_repositorio = db.Column(db.String(20), nullable=False)
     id_propietario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     descripcion = db.Column(db.String(100), nullable=True)
+    imagenes = db.relationship('Imagen', secondary=imagenes_repositorio, lazy='subquery', backref=db.backref('repositorios', lazy=True))
     
     def __repr__(self):
         return f"Repositorio('{self.nombre_repositorio}')"

@@ -71,9 +71,39 @@
 
 
     {% if repositorios %}
+      <div class="row p-5">
+        <div class="col-12 mb-1">
+          <div class="mb-5 d-flex justify-content-between">
+          <h2>Lista de repositorios</h2> 
+          {% if current_user == usuario %}
+          <button
+          href="#"
+          class="btn btn-primary mt-1"
+          data-mdb-toggle="modal"
+          data-mdb-target="#modalCrearRepositorio"
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i> Crear Repositorio
+        </button>
+          {% endif %}
+        </div>
+          <br>
+          <ol>
+     
       {% for repositorio in repositorios %}
-        {{repositorio.nombre_repositorio}}
+        <li class="p-2">
+          <a href="#">
+         <h5 class="text-primary"> {{repositorio.nombre_repositorio}}</h5>
+         </a>
+         {% if repositorio.descripcion %}
+         <p>{{ repositorio.descripcion }}</p>
+          {% endif %}
+        </li>
+        <hr>
       {% endfor %}
+    </ol>
+      
+        </div>
+      </div>
     {% endif %}
 
 <!-- 

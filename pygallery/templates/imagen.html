@@ -1,6 +1,17 @@
 {% extends "layout.html" %} {% block content %}
+<div class="d-flex">
+
+  <button
+  href="#"
+  class="btn btn-primary btn-sm m-1 justify-content-end"
+  data-mdb-toggle="modal"
+  data-mdb-target="#modalAgregarARepositorio"
+  >
+  <i class="fa fa-plus" aria-hidden="true"></i> Agregar a Repositorio
+  </button>
+  
+
 {% if current_user == imagen.autor %}
-<div>
     <a href="{{url_for('imagenes.editar_imagen', id_imagen = imagen.id)}}" class="btn btn-primary btn-sm mt-1 mb-1">Editar</a>
     <button
     type="button"
@@ -10,8 +21,10 @@
   >
     Eliminar
   </button>
-</div>
 {% endif %}
+
+
+</div>
 <div class="row">
   <div class="col-lg-12 w-auto">
     <img
@@ -56,6 +69,38 @@
         <form action="{{url_for('imagenes.eliminar_imagen', id_imagen=imagen.id)}}" method="post">
             <input type="submit" value="Eliminar" class="btn btn-dark ">
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Repo -->
+<div
+  class="modal fade"
+  id="modalAgregarARepositorio"
+  tabindex="-1"
+  aria-labelledby="modalAgregarARepositorio"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAgregarARepositorio">Agregar a repo</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-mdb-dismiss="modal">
+          Cerrar
+        </button>
+        <!-- <form action="{{url_for('imagenes.eliminar_imagen', id_imagen=imagen.id)}}" method="post">
+            <input type="submit" value="Eliminar" class="btn btn-dark ">
+        </form> -->
       </div>
     </div>
   </div>

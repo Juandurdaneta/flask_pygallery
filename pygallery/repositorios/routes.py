@@ -1,5 +1,5 @@
 from pygallery import db
-from pygallery.models import Usuario, Repositorio
+from pygallery.models import Usuario, Repositorio, Imagen
 from flask import Blueprint, render_template, redirect, request, url_for, flash, current_app, abort
 from pygallery.repositorios.forms import CrearRepositorioForm
 from flask_login import current_user
@@ -18,8 +18,21 @@ def repositorios_usuario(usuario):
         db.session.add(nuevo_repositorio)
         db.session.commit()
         flash("Repositorio creado exitosamente!", "success")
-        return redirect(url_for('repositorios_usuario', usuario=current_user.username))
+        return redirect(url_for('repositorios.repositorios_usuario', usuario=current_user.username))
     elif request.method == "POST" and not form.validate_on_submit():
         flash("Error al crear el repositorio, Intenalo de nuevo", "danger")
-    return render_template('repositorios_user.html', usuario=usuario, repositorios = repositorios_user, form=form)
+    return render_template('repositorios_user.html', title="Repositorios", usuario=usuario, repositorios = repositorios_user, form=form)
 
+@repositorios.route('/repositorio/<int:id_repositorio>/agregar/<int:id_imagen>', methods=['POST'])
+def agregar_imagen_repositorio(id_repositorio, id_imagen):
+    repositorio = Repositorio.query.get_or_404(id_repositorio)
+    imagen = Imagen.query.get_or_404(id_imagen)
+
+    if repositorio.propietario != current_user:
+        abort(403)
+    
+    repositorio.imagenes.append(imagen)
+    db.session.commit()
+
+    flash("Imagen agregada exitosamente!", "success")
+    return redirect(url_for("imagenes.imagen", id_imagen = id_imagen))
