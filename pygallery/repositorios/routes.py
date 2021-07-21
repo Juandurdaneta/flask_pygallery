@@ -1,7 +1,7 @@
 from pygallery import db
 from pygallery.models import Usuario, Repositorio, Imagen
 from flask import Blueprint, render_template, redirect, request, url_for, flash, current_app, abort
-from pygallery.repositorios.forms import CrearRepositorioForm
+from pygallery.repositorios.forms import CrearRepositorioForm, EditarRepositorioForm
 from flask_login import current_user
 
 repositorios = Blueprint('repositorios', __name__)
@@ -23,12 +23,23 @@ def repositorios_usuario(usuario):
         flash("Error al crear el repositorio, Intenalo de nuevo", "danger")
     return render_template('repositorios_user.html', title="Repositorios", usuario=usuario, repositorios = repositorios_user, form=form)
 
-@repositorios.route('/usuario/<string:usuario>/<int:repositorio>')
+@repositorios.route('/usuario/<string:usuario>/<int:repositorio>', methods=['GET', 'POST'])
 def repositorio(usuario, repositorio):
     usuario = Usuario.query.filter_by(username=usuario).first_or_404()
     repositorio_usuario = Repositorio.query.filter(Repositorio.id_propietario == usuario.id, Repositorio.id == repositorio).first_or_404()
+    
+    form = EditarRepositorioForm()
 
-    return render_template("repositorio.html", title=repositorio_usuario.nombre_repositorio, repositorio=repositorio_usuario)
+
+    if request.method == 'POST':
+        repositorio_usuario.nombre_repositorio = form.nombre_repositorio.data
+        repositorio_usuario.descripcion = form.descripcion_repositorio.data
+        flash('Repositorio editado exitosamente', 'success')
+
+    form.nombre_repositorio.data = repositorio_usuario.nombre_repositorio
+    form.descripcion_repositorio.data = repositorio_usuario.descripcion
+
+    return render_template("repositorio.html", title=repositorio_usuario.nombre_repositorio, repositorio=repositorio_usuario, form=form)
 
 @repositorios.route('/repositorio/<int:id_repositorio>/agregar/<int:id_imagen>', methods=['POST'])
 def agregar_imagen_repositorio(id_repositorio, id_imagen):

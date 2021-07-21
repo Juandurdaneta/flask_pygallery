@@ -11,7 +11,12 @@
      </div>
      <div>
         {% if current_user == repositorio.propietario %}
-        <a href="#" class="btn btn-primary">Editar Repositorio</a>
+        <a href="#" class="btn btn-primary"
+        type="button"
+        class="btn btn-dark btn-sm m-1"
+        data-mdb-toggle="modal"
+        data-mdb-target="#modalEditarRepositorio"
+        >Editar Repositorio</a>
         <a href="#" class="btn btn-dark"
         type="button"
         class="btn btn-dark btn-sm m-1"
@@ -79,7 +84,74 @@
 </div>
 
 
+<!-- MODAL PARA CREAR NUEVOS REPOSITORIOS -->
+
+<div
+class="modal fade"
+id="modalEditarRepositorio"
+tabindex="-1"
+aria-labelledby="modalEditarRepositorioLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modalEditarRepositorioLabel">
+        Editar Repositorio
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-mdb-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+    
+      <form action="" method="POST">
+      {{form.hidden_tag()}}
+      <fieldset class="form-group">
+         <!-- Nombre del Repositorio -->
+        <div class="form-group form-outline mb-4">
+          {% if form.nombre_repositorio.errors %} {{ form.nombre_repositorio(class="form-control
+          form-control-lg is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.nombre_repositorio.errors %}
+            <span>{{error}}</span>
+            {% endfor %}
+          </div>
+          {% else %} {{form.nombre_repositorio(class="form-control form-control-lg", id="nombre_repositorio")}} 
+          {{form.nombre_repositorio.label(class="form-control-label form-label", for="nombre_repositorio")}} {%
+          endif %}
+        </div>
+        <!-- DESCRIPCION -->
+          <div class="form-group form-outline mb-4">
+            {% if
+            form.descripcion_repositorio.errors %} {{ form.descripcion_repositorio(class="form-control
+            form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.descripcion_repositorio.errors %}
+              <span>{{error}}</span>
+              {% endfor %}
+            </div>
+            {% else %} {{form.descripcion_repositorio(class="form-control form-control-lg", id="descripcion_repositorio")}} 
+            
+            {{form.descripcion_repositorio.label(class="form-control-label form-label", for="descripcion_repositorio")}} 
+
+            {% endif %}
+          </div>
+          </fieldset>
+         <!-- SUBMIT -->
+       <div class="form-group mt-1 mb-1">{{form.submit(class="btn btn-primary btn-block btn-rounded")}}</div>
+      </form>
+    </div>
+  </div>
 </div>
 </div>
+
+</div>
+</div>
+
+
 
 {% endblock content %}
