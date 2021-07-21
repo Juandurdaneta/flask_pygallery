@@ -32,7 +32,7 @@ def repositorio(usuario, repositorio):
 
 
     if request.method == 'POST':
-        if repositorio.propietario != current_user:
+        if repositorio_usuario.propietario != current_user:
             abort(403)
 
         repositorio_usuario.nombre_repositorio = form.nombre_repositorio.data
