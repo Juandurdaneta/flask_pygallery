@@ -1,0 +1,47 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <div class="d-flex justify-content-between m-5">
+        <div>
+        <h1 class="account-heading">{{repositorio.nombre_repositorio}}</h1>
+        <p>{{repositorio.descripcion}}</p>
+
+        <p>Creado por: <a href="{{url_for('usuarios.perfil_usuario', usuario=repositorio.propietario.username)}}">{{repositorio.propietario.username}}</a></p>
+     </div>
+     <div>
+        {% if current_user == repositorio.propietario %}
+        <a href="#" class="btn btn-primary">Editar Repositorio</a>
+        <a href="#" class="btn btn-dark">Eliminar repositorio</a>
+
+        {% endif %}
+    </div>
+      </div>
+<hr>
+<div class="row m-5">
+{% for imagen in repositorio.imagenes %}
+<div class="col-lg-4 col-md-12 mb-4 mb-lg-0 mt-5">
+  <a href="{{url_for('imagenes.imagen', id_imagen = imagen.id)}}">
+  <img
+    src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
+    class="w-100 shadow-1-strong rounded mb-2"
+    
+  />
+</a>
+ <div class="d-flex justify-content-between mb-2">
+  <div> <caption> Publicado por: <a href="{{url_for('usuarios.perfil_usuario', usuario=imagen.autor.username)}}">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
+</div>
+  <caption>Etiquetas:</caption>
+
+  {% for etiquetas in imagen.etiquetas %}
+  <a href="{{url_for('imagenes.imagenes_etiqueta', etiqueta=etiquetas.nombre)}}" class="bg-primary text-white rounded p-1 me-1">{{etiquetas.nombre}}</a> 
+  {% endfor %}
+
+</div>
+{% endfor %}
+
+
+</div>
+</div>
+
+{% endblock content %}

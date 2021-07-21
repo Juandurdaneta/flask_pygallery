@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, url_for, flash, redirect, request, current_app, abort
 from flask_login import current_user, login_required
 from pygallery import db
-from pygallery.models import Usuario, Etiqueta, Imagen
+from pygallery.models import Usuario, Etiqueta, Imagen, Repositorio
 from pygallery.imagenes.forms import PublicarImagenForm, EditarImagenForm
 from pygallery.imagenes.utils import agregar_etiquetas, subir_imagen, cambiar_imagen
 
@@ -26,7 +26,11 @@ def publicar_imagen():
 @imagenes.route("/imagen/<int:id_imagen>")
 def imagen(id_imagen):
     imagen = Imagen.query.get_or_404(id_imagen)
-    return render_template('imagen.html', title = "Imagen", imagen=imagen)
+    if current_user.is_authenticated:
+        repositorios_user = Repositorio.query.filter(Repositorio.id_propietario == current_user.id).all()   
+        return render_template('imagen.html', title = "Imagen", imagen=imagen, repositorios=repositorios_user)
+    else:
+         return render_template('imagen.html', title = "Imagen", imagen=imagen)
 
 
 @imagenes.route("/imagen/<int:id_imagen>/editar", methods=['GET', 'POST'])

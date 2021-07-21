@@ -91,7 +91,7 @@
      
       {% for repositorio in repositorios %}
         <li class="p-2">
-          <a href="#">
+          <a href="{{url_for('repositorios.repositorio', usuario = repositorio.propietario.username, repositorio = repositorio.nombre_repositorio)}}">
          <h5 class="text-primary"> {{repositorio.nombre_repositorio}}</h5>
          </a>
          {% if repositorio.descripcion %}
@@ -106,19 +106,6 @@
       </div>
     {% endif %}
 
-<!-- 
-    <div class="p-5 text-center">
-      <h5>Aun no tienes repositorios</h5>
-      <button
-        href="#"
-        class="btn btn-primary mt-1"
-        data-mdb-toggle="modal"
-        data-mdb-target="#modalCrearRepositorio"
-      >
-        <i class="fa fa-plus" aria-hidden="true"></i> Crear Repositorio
-      </button>
- 
-       -->
        
       </div>
     </div>

@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <div class="d-flex">
-
+{% if current_user.is_authenticated %}
   <button
   href="#"
   class="btn btn-primary btn-sm m-1 justify-content-end"
@@ -9,7 +9,7 @@
   >
   <i class="fa fa-plus" aria-hidden="true"></i> Agregar a Repositorio
   </button>
-  
+{% endif %}
 
 {% if current_user == imagen.autor %}
     <a href="{{url_for('imagenes.editar_imagen', id_imagen = imagen.id)}}" class="btn btn-primary btn-sm mt-1 mb-1">Editar</a>
@@ -93,6 +93,27 @@
           data-mdb-dismiss="modal"
           aria-label="Close"
         ></button>
+      </div>
+      <div class="modal-body p-2 m-2">
+        {% if repositorios %}
+          <h5 class="mt-1">Selecciona un repositorio</h5>
+          <br>
+          <ol>
+          {% for repositorio in repositorios %}
+         <li> 
+           <div class="d-flex justify-content-between">
+           {{repositorio.nombre_repositorio}}
+           <form action="{{url_for('repositorios.agregar_imagen_repositorio', id_repositorio = repositorio.id, id_imagen = imagen.id)}}" method="post">
+             <input type="submit" value="+" class="btn btn-outline-primary btn-sm">
+           </form>
+          </div>
+           <hr>
+        </li>
+          {% endfor %}
+      </ol>
+        {% else  %}
+        <p class="text-center">Aun no tienes repositorios...</p>
+        {% endif %}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-light" data-mdb-dismiss="modal">

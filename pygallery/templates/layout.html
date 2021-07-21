@@ -87,6 +87,7 @@ href="{{url_for('static', filename='main.css')}}"
               <!-- Dropdown menu -->
               <ul class="dropdown-menu dropdown-menu-end p-1" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="{{url_for('usuarios.perfil_usuario', usuario=current_user.username)}}">Publicaciones</a></li>
+                <li><a class="dropdown-item" href="{{url_for('repositorios.repositorios_usuario', usuario=current_user.username)}}">Tus repositorios</a></li>
                 <li><a class="dropdown-item" href="{{url_for('usuarios.perfil')}}">Ajustes de Cuenta</a></li>
                 <li><a class="dropdown-item" href="{{url_for('usuarios.logout')}}">Cerrar Sesion</a></li>
           </ul>
