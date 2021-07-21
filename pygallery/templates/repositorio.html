@@ -12,7 +12,11 @@
      <div>
         {% if current_user == repositorio.propietario %}
         <a href="#" class="btn btn-primary">Editar Repositorio</a>
-        <a href="#" class="btn btn-dark">Eliminar repositorio</a>
+        <a href="#" class="btn btn-dark"
+        type="button"
+        class="btn btn-dark btn-sm m-1"
+        data-mdb-toggle="modal"
+        data-mdb-target="#modalEliminarRepositorio">Eliminar repositorio</a>
 
         {% endif %}
     </div>
@@ -41,6 +45,38 @@
 
 </div>
 {% endfor %}
+
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="modalEliminarRepositorio"
+  tabindex="-1"
+  aria-labelledby="modalEliminarRepositorioLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEliminarRepositorioLabel">Seguro que deseas eliminar este repositorio?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-mdb-dismiss="modal">
+          Cerrar
+        </button>
+        <form action="{{url_for('repositorios.eliminar_repositorio', id_repositorio=repositorio.id)}}" method="post">
+            <input type="submit" value="Eliminar" class="btn btn-dark ">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 </div>

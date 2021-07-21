@@ -64,3 +64,15 @@ def quitar_imagen(id_imagen, id_repositorio):
         return redirect(url_for('repositorios.repositorio', usuario=repositorio.propietario.username, repositorio=repositorio.id))
     else:
         abort(404)
+
+@repositorios.route('/repositorio/<int:id_repositorio>/eliminar', methods=['POST'])
+def eliminar_repositorio(id_repositorio):
+    repositorio = Repositorio.query.get_or_404(id_repositorio)
+
+    if repositorio.propietario != current_user:
+        abort(403)
+
+    db.session.delete(repositorio)
+    db.session.commit()
+    flash('Repositorio eliminado exitosamente!', "success")
+    return redirect(url_for('repositorios.repositorios_usuario', usuario=current_user.username))
