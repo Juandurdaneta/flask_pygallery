@@ -86,3 +86,21 @@ h1, h2, h3, h4, h5, h6 {
 .secondary-text{
   font-size: 2.5rem;
 }
+
+.img-container button{
+  position: absolute;
+  z-index: 5;
+  left: 34.8%;
+  /* position: absolute;
+  top: 65%;
+  left: 36%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); */
+
+}
+
+.absolute{
+  position: absolute;
+  z-index: 5;
+  margin-left: -2em;
+}

@@ -25,8 +25,13 @@
   <img
     src="{{url_for('static', filename='imagenes_subidas/'+imagen.ubicacion_imagen)}}"
     class="w-100 shadow-1-strong rounded mb-2"
-    
   />
+  {% if current_user == repositorio.propietario %}
+  <a class="btn btn-light btn-sm btn-floating absolute"> x</a>
+    <!-- <form action="{{url_for('imagenes.eliminar_imagen', id_imagen=imagen.id)}}" method="post">
+            <input type="submit" value="Eliminar" class="btn btn-dark ">
+        </form> -->
+  {% endif %}
 </a>
  <div class="d-flex justify-content-between mb-2">
   <div> <caption> Publicado por: <a href="{{url_for('usuarios.perfil_usuario', usuario=imagen.autor.username)}}">{{imagen.autor.username}}</a></caption></div><caption class="text-end">{{imagen.fecha_publicacion.strftime('%Y-%m-%d')}}</caption>
