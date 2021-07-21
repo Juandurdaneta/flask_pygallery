@@ -43,10 +43,8 @@
   <hr />
   <div class="row">
     <div class="col">
-      {% if repositorios %}
-      <p>Se han encontrado repositorios</p>
-      {{repositorios.nombre_repositorio}} {% else %} {% if current_user ==
-      usuario %}
+      {% if current_user == usuario %}
+        {% if not repositorios %}
       <div class="p-5 text-center">
         <h5>Aun no tienes repositorios</h5>
         <button
@@ -57,19 +55,47 @@
         >
           <i class="fa fa-plus" aria-hidden="true"></i> Crear Repositorio
         </button>
-        {% else %}
-        <div class="text-center p-5">
-          <h4>Este usuario aun no tiene repositorios de imagenes</h4>
-          <img
-            src="{{url_for('static', filename='imagenes_error/404.png')}}"
-            class="img-fluid"
-            width="580"
-          />
-        </div>
+        {% endif %}
+    {% else %} 
+        {% if not repositorios %}
+    <div class="text-center p-5">
+      <h4>Este usuario aun no tiene repositorios de imagenes</h4>
+      <img
+        src="{{url_for('static', filename='imagenes_error/404.png')}}"
+        class="img-fluid"
+        width="580"
+      />
+    </div>
+    {% endif %}
+    {% endif %}
+
+
+    {% if repositorios %}
+      {% for repositorio in repositorios %}
+        {{repositorio.nombre_repositorio}}
+      {% endfor %}
+    {% endif %}
+
+<!-- 
+    <div class="p-5 text-center">
+      <h5>Aun no tienes repositorios</h5>
+      <button
+        href="#"
+        class="btn btn-primary mt-1"
+        data-mdb-toggle="modal"
+        data-mdb-target="#modalCrearRepositorio"
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i> Crear Repositorio
+      </button>
+ 
+       -->
+       
       </div>
-      {% endif %} {% endif %}
     </div>
   </div>
+
+
+  <!-- MODAL PARA CREAR NUEVOS REPOSITORIOS -->
 
   <div
     class="modal fade"
@@ -82,7 +108,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalCrearRepositorioLabel">
-            Formulario para crear un repositorio
+            Crea un repositorio nuevo
           </h5>
           <button
             type="button"
@@ -93,8 +119,7 @@
         </div>
         <div class="modal-body">
         
-          <form
-          >
+          <form action="" method="POST">
           {{form.hidden_tag()}}
           <fieldset class="form-group">
              <!-- Nombre del Repositorio -->
@@ -110,8 +135,25 @@
               {{form.nombre_repositorio.label(class="form-control-label form-label", for="nombre_repositorio")}} {%
               endif %}
             </div>
+            <!-- DESCRIPCION -->
+              <div class="form-group form-outline mb-4">
+                {% if
+                form.descripcion_repositorio.errors %} {{ form.descripcion_repositorio(class="form-control
+                form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.descripcion_repositorio.errors %}
+                  <span>{{error}}</span>
+                  {% endfor %}
+                </div>
+                {% else %} {{form.descripcion_repositorio(class="form-control form-control-lg", id="descripcion_repositorio")}} 
+                
+                {{form.descripcion_repositorio.label(class="form-control-label form-label", for="descripcion_repositorio")}} 
+
+                {% endif %}
+              </div>
+              </fieldset>
              <!-- SUBMIT -->
-        <div class="form-group mt-1 mb-1">{{form.submit(class="btn btn-primary btn-block btn-rounded")}}</div>
+           <div class="form-group mt-1 mb-1">{{form.submit(class="btn btn-primary btn-block btn-rounded")}}</div>
           </form>
         </div>
       </div>
