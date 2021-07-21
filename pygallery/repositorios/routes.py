@@ -32,6 +32,9 @@ def repositorio(usuario, repositorio):
 
 
     if request.method == 'POST':
+        if repositorio.propietario != current_user:
+            abort(403)
+            
         repositorio_usuario.nombre_repositorio = form.nombre_repositorio.data
         repositorio_usuario.descripcion = form.descripcion_repositorio.data
         flash('Repositorio editado exitosamente', 'success')
